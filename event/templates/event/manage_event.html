@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Manage Event | {{ event.title }}
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 flex flex-col items-center p-6">
+
+    <!-- Pending Requests Section -->
+    <div class="mt-10 bg-white shadow-lg rounded-lg max-w-4xl w-full p-6 border border-gray-200">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">📌 Pending Requests</h2>
+        {% if pending_requests %}
+            <ul class="list-none space-y-4">
+                {% for request in pending_requests %}
+                    <li class="flex justify-between items-center bg-gray-100 p-4 rounded-lg shadow-sm border border-gray-300">
+                        <span class="text-lg text-gray-800 font-medium">{{ request.attendee.name }} ({{ request.attendee.email }})</span>
+                        <div class="flex space-x-3">
+                            <form method="POST" action="{% url 'event:approve_attendee' event.id request.attendee.id %}" class="inline">
+                                {% csrf_token %}
+                                <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-lg flex items-center space-x-2 shadow-md">
+                                    ✅ <span>Approve</span>
+                                </button>
+                            </form>
+                            <form method="POST" action="{% url 'event:reject_attendee' event.id request.attendee.id %}" class="inline">
+                                {% csrf_token %}
+                                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-lg flex items-center space-x-2 shadow-md">
+                                    ❌ <span>Reject</span>
+                                </button>
+                            </form>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-gray-500 text-lg mt-3">No pending requests.</p>
+        {% endif %}
+    </div>
+
+    <!-- Confirmed Attendees Section -->
+    <div class="mt-6 bg-white shadow-lg rounded-lg max-w-4xl w-full p-6 border border-gray-200">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">👥 Confirmed Attendees</h2>
+        {% if event.attendees.all %}
+            <ul class="list-none space-y-4">
+                {% for attendee in event.attendees.all %}
+                    <li class="flex justify-between items-center p-4 rounded-lg shadow-sm border border-gray-300">
+                        <span class="text-lg text-gray-800 font-medium">{{ attendee.name }} ({{ attendee.email }})</span>
+                        {% if event.organizer == request.user %}
+                            <form method="POST" action="{% url 'event:remove_attendee' event.id attendee.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-lg flex items-center space-x-2 shadow-md">
+                                    ❌ <span>Remove</span>
+                                </button>
+                            </form>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-gray-500 text-lg mt-3">No attendees yet.</p>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

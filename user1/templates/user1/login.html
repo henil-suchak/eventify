@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
+
+    <!-- Login Form Section (Styled like Sign-Up Form) -->
+    <div class="mt-16 p-6 bg-white shadow-lg rounded-lg max-w-4xl w-full flex-grow justify-content-center">
+        <h2 class="text-3xl font-semibold text-gray-900 mb-6 text-center">Login to Your Account</h2>
+
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            <div class="space-y-4">
+                {{ form.as_p }}
+            </div>
+            <div class="mt-6 flex justify-center">
+                <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg shadow-md w-full md:w-auto">
+                    Login
+                </button>
+            </div>
+        </form>
+
+        <p class="mt-6 text-lg text-gray-700 text-center">Don't have an account? 
+            <a href="{% url 'signup' %}" class="text-orange-500 hover:underline">Sign Up</a>
+        </p>
+    </div>
+
+</div>
+{% endblock %}

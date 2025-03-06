@@ -1,0 +1,67 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 flex flex-col items-center">
+
+    <!-- Edit Event Form Section -->
+    <div class="mt-16 p-6 bg-white shadow-lg rounded-lg max-w-4xl w-full">
+        <h2 class="text-3xl font-semibold text-gray-900 mb-6 text-center">Edit Event</h2>
+        <form method="POST" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {% csrf_token %}
+
+            <!-- Left Column: Form Fields -->
+            <div class="space-y-6 w-full">
+                <div class="flex flex-col">
+                    <label for="event_title" class="text-gray-700 font-medium">Event Title</label>
+                    {{ form.title }}
+                </div>
+                <div class="flex flex-col">
+                    <label for="event_description" class="text-gray-700 font-medium">Event Description</label>
+                    {{ form.description }}
+                </div>
+                <div class="flex flex-col">
+                    <label for="event_date" class="text-gray-700 font-medium">Event Date & Time</label>
+                    {{ form.date_time }}
+                </div>
+            </div>
+
+            <!-- Right Column: Location, Image Upload & Max Attendees -->
+            <div class="space-y-6 w-full">
+                <div class="flex flex-col">
+                    <label for="event_location" class="text-gray-700 font-medium">Location</label>
+                    {{ form.location }}
+                </div>
+                <div class="flex flex-col">
+                    <label for="event_max_attendees" class="text-gray-700 font-medium">Max Attendees</label>
+                    {{ form.max_attendees }}
+                </div>
+                <div class="flex flex-col">
+                    <label for="event_image" class="text-gray-700 font-medium">Upload Event Image (Leave blank to keep current)</label>
+                    {{ form.image }}
+                </div>
+            </div>
+
+            <!-- Full Width Submit Button -->
+            <div class="col-span-2 flex justify-center space-x-4">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md w-full md:w-auto">
+                    Update Event
+                </button>
+                <a href="{% url 'event:event_list' %}" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg shadow-md w-full md:w-auto text-center">
+                    Cancel
+                </a>
+            </div>
+        </form>
+<!-- Delete Event Option -->
+<div class="mt-6 text-center">
+    <form method="POST" action="{% url 'event:delete_event' event.id %}" id="delete-event-form">
+        {% csrf_token %}
+        <button type="submit" 
+                class="bg-blue-600 hover:bg-red-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md">
+            Delete Event
+        </button>
+    </form>
+</div>
+    </div>
+    <br>
+</div>
+{% endblock %}

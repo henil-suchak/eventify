@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
+
+    <!-- Sign Up Form Section -->
+    <div class="mt-16 p-6 bg-white shadow-lg rounded-lg max-w-4xl w-full flex-grow justify-content-center">
+        <h2 class="text-3xl font-semibold text-gray-900 mb-6">Create an Account</h2>
+        <form method="post" enctype="multipart/form-data" class="space-y-6">
+            {% csrf_token %}
+            <div class="space-y-4">
+                {{ form.as_p }}
+            </div>
+            <div class="mt-6">
+                <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg shadow-md w-full md:w-auto">
+                    Sign Up
+                </button>
+            </div>
+        </form>
+    </div>
+    <br>
+
+</div>
+{% endblock %}

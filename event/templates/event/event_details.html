@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{ event.title }} | Event Details
+{% endblock %}
+
+{% block content %}
+    <div class="min-h-screen bg-gray-100 flex flex-col items-center p-4">
+
+        <!-- Event Details Section -->
+        <div class="mt-16 p-6 bg-white shadow-lg rounded-lg max-w-4xl w-full">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:items-start">
+        <!-- Event Image -->
+        {% if event.image %}
+            <img src="{{ event.image.url }}" alt="{{ event.title }}" class="rounded-lg w-full h-80 object-cover">
+        {% else %}
+            <div class="w-full h-80 bg-gray-300 flex items-center justify-center text-gray-500">
+                No Image Available
+            </div>
+        {% endif %}
+
+        <!-- Event Information -->
+        <div class="w-full min-w-0">
+            <h1 class="text-4xl font-extrabold text-orange-500 break-words">{{ event.title }}</h1>
+            <p class="text-gray-600 mt-3 text-lg break-words break-all overflow-hidden w-full">
+                {{ event.description }}
+            </p>
+            <p class="text-xl font-semibold text-gray-900 mt-4">📅 Date & Time: {{ event.date_time }}</p>
+
+            <div class="mt-6 flex flex-wrap justify-center md:justify-start gap-4">
+                <a href="{% url 'event:register_user_page' event.id %}" 
+                   class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition-all duration-300 ease-in-out">
+                    ✅ Register
+                </a>
+                {% if event.organizer == request.user %}
+                    <a href="{% url 'event:edit_event' event.id %}" 
+                       class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition-all duration-300 ease-in-out">
+                        ✏ Edit Event
+                    </a>
+                    <a href="{% url 'event:manage_event' event.id %}" 
+                       class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition-all duration-300 ease-in-out">
+                        ⚙ Manage Event
+                    </a>
+                {% endif %}
+            </div>
+
+            <div class="mt-6 text-center">
+                <a href="{% url 'event:event_list' %}" 
+                   class="bg-orange-600 hover:bg-orange-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition-all duration-300 ease-in-out">
+                    🔙 Back to Events
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <br>
+
+        <!-- Success Popup -->
+        {% if messages %}
+        <div id="popup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                <p class="text-green-600 font-semibold text-lg">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </p>
+                <button onclick="closePopup()" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">OK</button>
+            </div>
+        </div>
+
+        <script>
+            function closePopup() {
+                document.getElementById("popup").style.display = "none";
+            }
+            // Automatically close after 3 seconds
+            setTimeout(closePopup, 1000);
+        </script>
+        {% endif %}
+
+    </div>
+{% endblock %}
